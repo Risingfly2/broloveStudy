@@ -1,4 +1,4 @@
-package io.gen.decorator;
+package io.gen.desigin.pattern.decorator;
 
 /**
  * Decorator and decoratored class should implements the same interface,

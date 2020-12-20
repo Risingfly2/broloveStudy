@@ -1,4 +1,4 @@
-package io.gen.decorator;
+package io.gen.desigin.pattern.decorator;
 
 public class A implements IA{
     @Override
