@@ -1,8 +1,14 @@
 package io.gen.study;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.function.Supplier;
 
 public class Job implements NotifyListener, Runnable{
+
+    public static Logger logger = LogManager.getLogger(Job.class);
+
     public Job() {
     }
 
@@ -34,6 +40,8 @@ public class Job implements NotifyListener, Runnable{
                         System.out.println("fuck listener" + shit);
                     }
                 });
+
+                logger.info("the job is running {}", i);
             }
             onSuccess();
         } catch (Exception e) {
