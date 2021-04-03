@@ -77,7 +77,7 @@ public class Solution {
     }
 
     int len = 0;
-    public List<List<Integer>> fourSum(int[] nums, int target){
+    public List<List<Integer>> kSum(int[] nums, int target){
         len = nums.length;
         Arrays.sort(nums);
         return kSum(nums, target, 4 , 0);
@@ -338,5 +338,414 @@ public class Solution {
             maxSize = Math.max(maxSize, right - left + 1);
         }
         return maxSize;
+    }
+
+    public String findLongestWord(String s, List<String> dictionary) {
+
+        String res = "";
+        for (String w : dictionary){
+            if (isSubString(s, w)){
+                if (w.length() > res.length()) res = w;
+                if (w.length() == res.length() && (w.compareTo(res) < 0)) res = w;
+            }
+        }
+        return res;
+    }
+
+    private boolean isSubString(String s, String w){
+
+        int i = 0, j = 0;
+        while (i < s.length() && j < w.length()){
+            if (s.charAt(i) == w.charAt(j)){
+                j++;
+            }
+            i++;
+        }
+        return j == w.length();
+    }
+
+
+    public int search(int[] nums, int target) {
+
+        int midIndex = findMid(nums);
+        if (target == nums[midIndex]) return midIndex;
+        int left = (target <= nums[nums.length - 1] ? midIndex : 0);
+        int right = (target > nums[nums.length - 1] ? midIndex : nums.length - 1);
+
+        while (left <= right){
+            int mid = left + (right - left) / 2;
+            if (nums[mid] == target){
+                return mid;
+            }else if (nums[mid] < target){
+                left = mid + 1;
+            }else {
+                right = mid - 1;
+            }
+        }
+        return -1;
+
+    }
+
+    private int findMid(int[] nums){
+        int left = 0, right = nums.length - 1;
+        while (left < right){
+            int mid = left + (right - left) / 2;
+            if (nums[mid] > nums[right]){
+                left = mid + 1;
+            }else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+
+
+    public int[] searchRange(int[] nums, int target) {
+
+        int[] res = new int[2];
+        res[0] = findFirst(nums, target);
+        res[1] = findLast(nums, target);
+        return res;
+    }
+
+    private int findFirst(int[] nums, int target){
+        int idx = -1;
+        int left = 0, right = nums.length - 1;
+        while (left <= right){
+            int mid = left + (right - left)/2;
+            if (nums[mid] >= target){
+                right = mid - 1;
+            }else {
+                left = mid + 1;
+            }
+            if (nums[mid] == target) idx = mid;
+        }
+        return idx;
+    }
+
+    private int findLast(int[] nums, int target){
+        int idx = -1;
+        int left = 0, right = nums.length - 1;
+        while (left <= right){
+            int mid = left + (right - left)/2;
+            if (nums[mid] <= target){
+                left = mid + 1;
+            }else {
+                right = mid - 1;
+            }
+            if (nums[mid] == target) idx = mid;
+        }
+        return idx;
+    }
+
+    public int searchInsert(int[] nums, int target) {
+
+        int left = 0, right = nums.length - 1;
+        while (left <= right){
+            int mid = left + (right - left)/2;
+            if (nums[mid] == target){
+                return mid;
+            }else if (nums[mid] < target){
+                left = mid + 1;
+            }else {
+                right = mid - 1;
+            }
+        }
+        return left;
+    }
+
+    public double myPow(double x, int n){
+        if (n == 0){
+            return 1;
+        }
+        if (n == Integer.MIN_VALUE){
+            x = x * x;
+            n = n >>1;
+        }
+        if (n < 0){
+            n = -n;
+            x = 1/x;
+        }
+        return n % 2 == 0 ? myPow(x * x, n/2) : x * myPow(x * x, n/2);
+    }
+
+
+    public int mySqrt(int x) {
+
+        int left = 1, right = x;
+        while (left <= right){
+            int mid = left + (right - left)/2;
+            if (mid == x/mid){
+                return mid;
+            }else if (mid < x/mid){
+                left = mid + 1;
+            }else {
+                right = mid - 1;
+            }
+        }
+        return right;
+    }
+
+    public boolean searchMatrix(int[][] matrix, int target) {
+
+        int m = matrix.length - 1;
+        int n = matrix[0].length - 1;
+
+        int i = m, j = 0;
+        while (i >= 0 && j <= n){
+            int mid = matrix[i][j];
+            if (mid == target){
+                return true;
+            }else if (mid < target){
+                j++;
+            }else {
+                i--;
+            }
+        }
+        return false;
+    }
+
+
+    //1.first ele equal to the target
+    public int searchFirstEleIndex(int[] nums, int target){
+        int left = 0, right = nums.length - 1;
+        while (left <= right){
+            int mid = left + ((right - left) >> 1);
+            if (nums[mid] > target){
+                right = mid - 1;
+            }else if (nums[mid] < target){
+                left = mid + 1;
+            }else {
+                //
+                if (mid == 0 || (nums[mid - 1] != target)){
+                    return mid;
+                }else {
+                    right = mid - 1;
+                }
+            }
+        }
+        return -1;
+    }
+
+    //2.last ele equal to the target
+    public int searchLastEleIndex(int[] nums, int target){
+        int left = 0, right = nums.length - 1;
+        while (left <= right){
+            int mid = left + ((right - left) >> 1);
+            if (nums[mid] > target){
+                right = mid - 1;
+            }else if (nums[mid] < target){
+                left = mid + 1;
+            }else {
+                //
+                if (mid == nums.length - 1 || (nums[mid + 1] != target)){
+                    return mid;
+                }else {
+                    left = mid + 1;
+                }
+            }
+        }
+        return -1;
+    }
+
+    //3.first ele more than the target
+    public int searchFirstMoreThanTheTarget(int[] nums, int target){
+        int left = 0, right = nums.length - 1;
+        while (left <= right){
+            int mid = left + ((right - left) >> 1);
+            if (nums[mid] < target){
+                left = mid + 1;
+            }else {
+                if (mid == 0 || (nums[mid - 1] < target)){
+                    return mid;
+                }else {
+                    right = mid - 1;
+                }
+            }
+        }
+        return -1;
+    }
+
+
+    //4.last ele less than the target
+    public int searchLastMoreThanTheTarget(int[] nums, int target){
+        int left = 0, right = nums.length - 1;
+        while (left <= right){
+            int mid = left + ((right - left) >> 1);
+            if (nums[mid] > target){
+                right = mid - 1;
+            }else {
+                if (mid == nums.length - 1 || (nums[mid + 1] > target)){
+                    return mid;
+                }else {
+                    left = mid + 1;
+                }
+            }
+        }
+        return -1;
+    }
+
+    int findMin(int[] nums){
+        int left = 0, right = nums.length - 1;
+        while (left < right){
+            if (nums[left] < nums[right]){
+                return nums[left];
+            }
+            int mid = left + ((right - left) >> 1);
+            if (nums[mid] >= nums[left]){
+                left = mid + 1;
+            }else {
+                right = mid;
+            }
+        }
+        return nums[left];
+    }
+
+    public class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode() {}
+    TreeNode(int val) { this.val = val; }
+    TreeNode(int val, TreeNode left, TreeNode right) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+    }
+ }
+
+    public int countNodes(TreeNode root) {
+        if (root == null){
+            return 0;
+        }
+        return countNodes(root.left) + countNodes(root.right) + 1;
+    }
+
+
+    int count = 0;
+    int number = 0;
+    public int kthSmallest(TreeNode root, int k) {
+
+        count = k;
+        helper(root);
+        return number;
+    }
+
+    public void helper(TreeNode root){
+        if (root.left != null){
+            helper(root.left);
+        }
+        count--;
+        if (count == 0){
+            number = root.val;
+            return;
+        }
+        if (root.right != null){
+            helper(root.right);
+        }
+    }
+
+
+    public int firstBadVersion(int n) {
+
+        int left = 1, right = n;
+        while (left < right){
+            int mid = left + ((right - left) >> 1);
+            if (!isBadVersion(mid)){
+                left = mid + 1;
+            }else {
+                right = mid;
+            }
+        }
+        return left;
+    }
+
+    public boolean isBadVersion(int val){
+        return true;
+    }
+
+    public List<List<String>> groupAnagrams(String[] strs){
+        if (strs == null || strs.length == 0){
+            return new ArrayList<>();
+        }
+        Map<String, List<String>> map = new HashMap<>();
+        for (String s: strs){
+            char[] ca = new char[26];
+            for (char c: s.toCharArray()){
+                ca[c - 'a']++;
+            }
+            String keyStr = String.valueOf(ca);
+            if (!map.containsKey(keyStr)){
+                map.put(keyStr, new ArrayList<>());
+            }
+            map.get(keyStr).add(s);
+        }
+        return new ArrayList<>(map.values());
+    }
+
+
+    List<Integer> res = new ArrayList<>();
+    public List<Integer> inorderTraversal(TreeNode root) {
+        if (root == null){
+            return res;
+        }
+        help(root);
+        return res;
+    }
+
+    public void help(TreeNode root){
+        //use extra function because of the return value
+        if (root.left != null){
+            res = inorderTraversal(root.left);
+        }
+        res.add(root.val);
+        if (root.right != null){
+            res = inorderTraversal(root.right);
+        }
+    }
+
+    public int singleNumber(int[] nums) {
+
+        if (nums == null || nums.length == 0){
+            return -1;
+        }
+        int tmp = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            tmp = tmp ^ nums[i];
+        }
+        return tmp;
+    }
+
+
+    public List<String> findRepeatedDnaSequences(String s) {
+
+        Set<String> seen = new HashSet<>();
+        List<String> repeated = new ArrayList<>();
+        for (int i = 0; i + 9 < s.length(); i++) {
+            String ten = s.substring(i, i + 10);
+            if (!seen.add(ten)){
+                repeated.add(ten);
+            }
+        }
+        return repeated;
+    }
+
+    public boolean isHappy(int n) {
+
+        Set<Integer> set = new HashSet<>();
+        int sum = 0, tmp = 0;
+        while (set.add(n)){
+            while (n != 0){
+                tmp = n % 10;
+                sum += tmp * tmp;
+                n /= 10;
+            }
+            if (sum == 1){
+                return true;
+            }else {
+                n = sum;
+            }
+        }
+        return false;
     }
 }
